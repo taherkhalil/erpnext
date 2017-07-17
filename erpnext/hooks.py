@@ -72,8 +72,8 @@ website_route_rules = [
 			"parents": [{"title": _("Invoices"), "name": "invoices"}]
 		}
 	},
-	{"from_route": "/quotations", "to_route": "Supplier Quotation"},
-	{"from_route": "/quotations/<path:name>", "to_route": "order",
+	{"from_route": "/supplier-quotations", "to_route": "Supplier Quotation"},
+	{"from_route": "/supplier-quotations/<path:name>", "to_route": "order",
 		"defaults": {
 			"doctype": "Supplier Quotation",
 			"parents": [{"title": _("Supplier Quotation"), "name": "quotations"}]
@@ -109,7 +109,7 @@ website_route_rules = [
 standard_portal_menu_items = [
 	{"title": _("Projects"), "route": "/project", "reference_doctype": "Project"},
 	{"title": _("Request for Quotations"), "route": "/rfq", "reference_doctype": "Request for Quotation", "role": "Supplier"},
-	{"title": _("Supplier Quotation"), "route": "/quotations", "reference_doctype": "Supplier Quotation", "role": "Supplier"},
+	{"title": _("Supplier Quotation"), "route": "/supplier-quotations", "reference_doctype": "Supplier Quotation", "role": "Supplier"},
 	{"title": _("Quotations"), "route": "/quotation", "reference_doctype": "Quotation", "role":"Customer"},
 	{"title": _("Orders"), "route": "/orders", "reference_doctype": "Sales Order", "role":"Customer"},
 	{"title": _("Invoices"), "route": "/invoices", "reference_doctype": "Sales Invoice", "role":"Customer"},
