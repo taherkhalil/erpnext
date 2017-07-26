@@ -46,15 +46,13 @@ var erpnext_slides = [
 				fieldtype: "Attach Image", fieldname: "attach_logo",
 				label: __("Attach Logo"),
 				description: __("100px by 100px"),
-				is_private: 0,
-				align: 'center'
+				is_private: 0
 			},
 			{
 				fieldname: 'company_name',
 				label: frappe.setup.domain === 'Education' ?
 					__('Institute Name') : __('Company Name'),
-				fieldtype: 'Data',
-				reqd: 1
+				fieldtype: 'Data', reqd: 1
 			},
 			{
 				fieldname: 'company_abbr',
