@@ -45,7 +45,7 @@ class ProcessPayroll(Document):
 				where
 					t1.docstatus!=2
 					and t1.name = t2.employee
-			%s """% cond, {"sal_struct": sal_struct})
+			%s """% cond, {"sal_struct": sal_struct} ,debug=1)
 			return emp_list
 
 	def get_filter_condition(self):
@@ -54,7 +54,9 @@ class ProcessPayroll(Document):
 		cond = ''
 		for f in ['company', 'branch', 'department', 'designation']:
 			if self.get(f):
-				cond += " and t1." + f + " = '" + self.get(f).replace("'", "\'") + "'"
+				c1=' and t1.' + f + ' = "'
+				c2= self.get(f).replace("'", "\'") + '"'
+				cond += c1 +c2
 
 		return cond
 
