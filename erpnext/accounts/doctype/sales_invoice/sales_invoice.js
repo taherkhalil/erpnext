@@ -17,6 +17,10 @@ erpnext.accounts.SalesInvoiceController = erpnext.selling.SellingController.exte
 	onload: function() {
 		var me = this;
 		this._super();
+		if(cur_frm.doc.__islocal) {
+      		frappe.model.clear_table(cur_frm.doc, "items");
+		}
+
 
 		if(!this.frm.doc.__islocal && !this.frm.doc.customer && this.frm.doc.debit_to) {
 			// show debit_to in print format
@@ -33,6 +37,7 @@ erpnext.accounts.SalesInvoiceController = erpnext.selling.SellingController.exte
 			me.frm.script_manager.trigger("is_pos");
 			me.frm.refresh_fields();
 		}
+		
 	},
 
 	refresh: function(doc, dt, dn) {
@@ -499,6 +504,7 @@ frappe.ui.form.on('Sales Invoice', {
 			'Payment Request': 'Payment Request',
 			'Payment Entry': 'Payment'
 		},
+
 		frm.fields_dict["timesheets"].grid.get_field("time_sheet").get_query = function(doc, cdt, cdn){
 			return{
 				query: "erpnext.projects.doctype.timesheet.timesheet.get_timesheet",
@@ -533,7 +539,6 @@ frappe.ui.form.on('Sales Invoice', {
 			};
 		});
 	},
-
 	project: function(frm){
 		frm.call({
 			method: "add_timesheet_data",
@@ -542,6 +547,37 @@ frappe.ui.form.on('Sales Invoice', {
 				refresh_field(['timesheets'])
 			}
 		})
+	},
+	barcode: function(doc, cdt, cdn) {
+		var d = locals[cdt][cdn];
+		if (d.barcode) {
+			frappe.call({
+				method: "erpnext.stock.get_item_details.get_item_code",
+				args: {"barcode": d.barcode },
+				callback: function(r) {
+					if (!r.exe){
+						var flag =false;
+						$.each(cur_frm.doc["items"] || [], function (i, d) {
+								if (d["item_code"] === r.message) {		
+									frappe.model.set_value(d.doctype, d.name, "qty", d.qty+1);
+									flag= true;
+									cur_frm.set_value("barcode","");
+									cur_frm.refresh_field("barcode");
+
+							}});
+						if(!flag)
+						{
+							var child = cur_frm.add_child("items");
+							frappe.model.set_value(child.doctype, child.name, "item_code", r.message);
+							cur_frm.refresh_field("items");
+							cur_frm.set_value("barcode","");
+							cur_frm.refresh_field("barcode");
+						}	
+					}
+				}
+			});
+
+		}
 	}
 })
 
