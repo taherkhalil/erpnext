@@ -563,7 +563,6 @@ frappe.ui.form.on('Sales Invoice', {
 									flag= true;
 									cur_frm.set_value("barcode","");
 									cur_frm.refresh_field("barcode");
-
 							}});
 						if(!flag)
 						{
@@ -572,7 +571,7 @@ frappe.ui.form.on('Sales Invoice', {
 							cur_frm.refresh_field("items");
 							cur_frm.set_value("barcode","");
 							cur_frm.refresh_field("barcode");
-						}	
+						}
 					}
 				}
 			});
