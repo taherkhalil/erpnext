@@ -24,6 +24,10 @@ frappe.ui.form.on("Purchase Receipt", {
 			})
 		})
 
+		if(cur_frm.doc.__islocal) {
+      		frappe.model.clear_table(cur_frm.doc, "items");
+		}
+
 		frm.set_query("supplier_warehouse", function() {
 			return {
 				filters: [
@@ -33,6 +37,36 @@ frappe.ui.form.on("Purchase Receipt", {
 			}
 		});
 
+	},
+	barcode: function(doc, cdt, cdn) {
+		var d = locals[cdt][cdn];
+		if (d.barcode) {
+			frappe.call({
+				method: "erpnext.stock.get_item_details.get_item_code",
+				args: {"barcode": d.barcode },
+				callback: function(r) {
+					if (!r.exe){
+						var flag =false;
+						$.each(cur_frm.doc["items"] || [], function (i, d) {
+								if (d["item_code"] === r.message) {		
+									frappe.model.set_value(d.doctype, d.name, "qty", d.qty+1);
+									flag= true;
+									cur_frm.set_value("barcode","");
+									cur_frm.refresh_field("barcode");
+							}});
+						if(!flag)
+						{
+							var child = cur_frm.add_child("items");
+							frappe.model.set_value(child.doctype, child.name, "item_code", r.message);
+							cur_frm.refresh_field("items");
+							cur_frm.set_value("barcode","");
+							cur_frm.refresh_field("barcode");
+						}
+					}
+				}
+			});
+
+		}
 	},
 
 	refresh: function(frm) {
