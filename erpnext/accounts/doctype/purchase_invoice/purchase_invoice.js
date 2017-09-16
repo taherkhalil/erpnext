@@ -28,6 +28,14 @@ erpnext.accounts.PurchaseInvoice = erpnext.buying.BuyingController.extend({
 			function(doc) { return (doc.qty<=doc.received_qty) ? "green" : "orange" })
 
 	},
+	validate: function(doc, dt, dn) {
+	var wh = cur_frm.doc.default_warehouse ;
+	$.each(doc["items"], function(i, row){
+		frappe.model.set_value(row.doctype, row.name, "warehouse", wh);
+		cur_frm.refresh_fields("items");
+		})
+	},
+
 
 	refresh: function(doc) {
 		this._super();

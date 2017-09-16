@@ -38,6 +38,13 @@ frappe.ui.form.on("Purchase Receipt", {
 		});
 
 	},
+	validate: function(doc, dt, dn) {
+		var wh = cur_frm.doc.default_warehouse ;
+		$.each(doc["items"], function(i, row){
+			frappe.model.set_value(row.doctype, row.name, "warehouse", wh);
+			cur_frm.refresh_fields("items");
+			})
+	},
 	barcode: function(doc, cdt, cdn) {
 		var d = locals[cdt][cdn];
 		if (d.barcode) {
