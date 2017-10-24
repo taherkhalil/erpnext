@@ -1290,7 +1290,7 @@ erpnext.pos.PointOfSale = erpnext.taxes_and_totals.extend({
 				total = me.frm.doc.net_total
 			}
 
-			me.frm.doc.discount_amount = flt(total * flt(me.frm.doc.additional_discount_percentage) / 100, precision("discount_amount"));
+			me.frm.doc.discount_amount = flt((total) * flt(me.frm.doc.additional_discount_percentage) / 100, precision("discount_amount"));
 			me.wrapper.find('input.discount-amount').val(me.frm.doc.discount_amount)
 			me.refresh();
 		});
@@ -1482,6 +1482,8 @@ erpnext.pos.PointOfSale = erpnext.taxes_and_totals.extend({
 
 	make_new_cart: function (){
 		this.item_code = '';
+		this.wrapper.find('input.discount-percentage').val('');
+		this.wrapper.find('input.discount-amount').val('');
 		this.page.clear_secondary_action();
 		this.save_previous_entry();
 		this.create_new();
@@ -1489,6 +1491,7 @@ erpnext.pos.PointOfSale = erpnext.taxes_and_totals.extend({
 		this.toggle_input_field();
 		this.render_list_customers();
 		this.set_focus();
+		window.location.reload(true);
 	},
 
 	print_dialog: function () {
